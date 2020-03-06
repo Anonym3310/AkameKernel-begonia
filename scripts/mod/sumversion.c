@@ -406,6 +406,7 @@ void get_src_version(const char *modname, char sum[], unsigned sumlen)
 	const char *basename;
 	char filelist[PATH_MAX + 1];
 	char *modverdir = getenv("MODVERDIR");
+	int postfix_len = 2;
 
 	if (!modverdir)
 		modverdir = ".";
@@ -416,8 +417,12 @@ void get_src_version(const char *modname, char sum[], unsigned sumlen)
 		basename = strrchr(modname, '/') + 1;
 	else
 		basename = modname;
+
+	if (strends(basename, ".lto.o"))
+		postfix_len = 6;
+
 	snprintf(filelist, sizeof(filelist), "%s/%.*s.mod", modverdir,
-		(int) strlen(basename) - 2, basename);
+		(int) strlen(basename) - postfix_len, basename);
 
 	file = grab_file(filelist, &len);
 	if (!file)

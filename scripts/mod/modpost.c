@@ -16,7 +16,6 @@
 #include <ctype.h>
 #include <string.h>
 #include <limits.h>
-#include <stdbool.h>
 #include <errno.h>
 #include "modpost.h"
 #include "../../include/generated/autoconf.h"
@@ -90,14 +89,6 @@ PRINTF void merror(const char *fmt, ...)
 	va_end(arglist);
 }
 
-static inline bool strends(const char *str, const char *postfix)
-{
-	if (strlen(str) < strlen(postfix))
-		return false;
-
-	return strcmp(str + strlen(str) - strlen(postfix), postfix) == 0;
-}
-
 static int is_vmlinux(const char *modname)
 {
 	const char *myname;
@@ -147,6 +138,9 @@ static struct module *new_module(const char *modname)
 		p[strlen(p) - 2] = '\0';
 		mod->is_dot_o = 1;
 	}
+	/* strip trailing .lto */
+	if (strends(p, ".lto"))
+		p[strlen(p) - 4] = '\0';
 
 	/* add to list */
 	mod->name = p;
@@ -1969,6 +1963,10 @@ static char *remove_dot(char *s)
 		size_t m = strspn(s + n + 1, "0123456789");
 		if (m && (s[n + m] == '.' || s[n + m] == 0))
 			s[n] = 0;
+
+		/* strip trailing .lto */
+		if (strends(s, ".lto"))
+			s[strlen(s) - 4] = '\0';
 	}
 	return s;
 }
