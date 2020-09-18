@@ -1,6 +1,8 @@
-# AkameKernel-begonia
+
 ============
+
 Linux kernel
+
 ============
 
 This file was moved to Documentation/admin-guide/README.rst
