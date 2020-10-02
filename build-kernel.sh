@@ -4,7 +4,7 @@ echo
 echo "Clean Build Directory"
 echo 
 
-sudo make clean proper CC=clang HOSTCC=clang -j16
+sudo make clean mrproper CC=clang HOSTCC=clang -j16
 rm -rf out
 echo
 echo "Create Working Directory"
