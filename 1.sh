@@ -11,7 +11,7 @@ export CROSS_COMPILE=aarch64-linux-gnu-
 export CLANG_TRIPLE=aarch64-linux-gnu-
 export CROSS_COMPILE_ARM32=arm-linux-gnueabi-
 export CODENAME=joyeus
-export DEFCONFIG=akame11_defconfig
+export DEFCONFIG=miui_defconfig
 export OUT_DIR=out
 export ANYKERNEL_DIR=AnyKernel3
 export ARCH=arm64
@@ -86,7 +86,7 @@ sudo ccache make dtbo.img \
         O=${OUT_DIR} \
         ${CORES}
 
-sudo make firmware_install modules_install \
+sudo make firmware_install  modules_install \
         PATH=${PATH} \
         CC=${CC} \
         CLANG_TRIPLE=${CLANG_TRIPLE} \
