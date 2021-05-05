@@ -67,7 +67,7 @@ static int qos_ipi_recv_thread(void *arg)
 					get_qos_bound());
 			break;
 		default:
-			pr_err("wrong QoS IPI command: %d\n", qos_ipi_d.cmd);
+			pr_debug("wrong QoS IPI command: %d\n", qos_ipi_d.cmd);
 		}
 	} while (!kthread_should_stop());
 
@@ -86,12 +86,12 @@ int qos_ipi_to_sspm_command(void *buffer, int slot)
 		IPI_SEND_POLLING, buffer,
 		slot, 10);
 	if (ret) {
-		pr_err("SSPM: plt IPI fail ret=%d\n", ret);
+		pr_debug("SSPM: plt IPI fail ret=%d\n", ret);
 		goto error;
 	}
 
 	if (!qos_ipi_ackdata) {
-		pr_err("SSPM: plt IPI init fail, ackdata=%d\n",
+		pr_debug("SSPM: plt IPI init fail, ackdata=%d\n",
 		qos_ipi_ackdata);
 		goto error;
 	}
