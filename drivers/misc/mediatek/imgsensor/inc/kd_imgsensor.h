@@ -551,6 +551,7 @@ void KD_IMGSENSOR_PROFILE_I2C(char *tag, int trans_num);
 
 #define S5KGW1OFILM_SENSOR_ID                    0x971
 #define S5KGW1SUNNY_SENSOR_ID                   (0x971 + 1)
+#define S5K3T2_SENSOR_ID                         0x3142
 #define S5K3T1OFILM_SENSOR_ID                    0x3141
 #define S5K3T1SUNNY_SENSOR_ID                   (0x3141 + 1)
 #define GC5035_SENSOR_ID                         0x5035
@@ -565,6 +566,7 @@ void KD_IMGSENSOR_PROFILE_I2C(char *tag, int trans_num);
 
 #define SENSOR_DRVNAME_S5KGW1OFILM_MIPI_RAW      "s5kgw1ofilm_mipi_raw"
 #define SENSOR_DRVNAME_S5KGW1SUNNY_MIPI_RAW      "s5kgw1sunny_mipi_raw"
+#define SENSOR_DRVNAME_S5K3T2_MIPI_RAW           "s5k3t2_mipi_raw"
 #define SENSOR_DRVNAME_S5K3T1OFILM_MIPI_RAW      "s5k3t1ofilm_mipi_raw"
 #define SENSOR_DRVNAME_S5K3T1SUNNY_MIPI_RAW      "s5k3t1sunny_mipi_raw"
 #define SENSOR_DRVNAME_GC5035_MIPI_RAW           "gc5035_mipi_raw"
