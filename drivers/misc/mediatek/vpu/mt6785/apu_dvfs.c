@@ -611,8 +611,9 @@ int vpu_get_hw_vvpu_opp(int core)
 		opp_value = 2;
 	else
 		opp_value = 3;
-		LOG_DVFS("[vpu_%d] vvpu(%d->%d)\n",
-			core, get_vvpu_value, opp_value);
+
+	LOG_DVFS("[vpu_%d] vvpu(%d->%d)\n",
+		core, get_vvpu_value, opp_value);
 	return opp_value;
 
 }
