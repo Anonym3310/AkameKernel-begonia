@@ -31,6 +31,7 @@
 #include <linux/slab.h>
 #include <linux/percpu-rwsem.h>
 #include <linux/cpuset.h>
+#include <linux/interrupt.h>
 
 #include <trace/events/power.h>
 #define CREATE_TRACE_POINTS
