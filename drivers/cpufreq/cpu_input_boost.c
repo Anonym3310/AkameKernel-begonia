@@ -21,6 +21,22 @@
 
 static bool use_input_boost = true;
 module_param(use_input_boost, bool, 0644);
+static unsigned int INPUT_BOOST_DURATION_MS = CONFIG_INPUT_BOOST_DURATION_MS;
+module_param(INPUT_BOOST_DURATION_MS, uint, 0644);
+static unsigned int WAKE_BOOST_DURATION_MS = CONFIG_WAKE_BOOST_DURATION_MS;
+module_param(WAKE_BOOST_DURATION_MS, uint, 0644);
+static unsigned int INPUT_BOOST_FREQ_LP = CONFIG_INPUT_BOOST_FREQ_LP;
+module_param(INPUT_BOOST_FREQ_LP, uint, 0644);
+static unsigned int INPUT_BOOST_FREQ_PERF = CONFIG_INPUT_BOOST_FREQ_PERF;
+module_param(INPUT_BOOST_FREQ_PERF, uint, 0644);
+static unsigned int MAX_BOOST_FREQ_LP = CONFIG_MAX_BOOST_FREQ_LP;
+module_param(MAX_BOOST_FREQ_LP, uint, 0644);
+static unsigned int MAX_BOOST_FREQ_PERF = CONFIG_MAX_BOOST_FREQ_PERF;
+module_param(MAX_BOOST_FREQ_PERF, uint, 0644);
+static unsigned int MIN_FREQ_LP = CONFIG_MIN_FREQ_LP;
+module_param(MIN_FREQ_LP, uint, 0644);
+static unsigned int MIN_FREQ_PERF = CONFIG_MIN_FREQ_PERF;
+module_param(MIN_FREQ_PERF, uint, 0644);
 
 enum {
 	SCREEN_OFF,
@@ -56,9 +72,9 @@ static unsigned int get_input_boost_freq(struct cpufreq_policy *policy)
 		return 0;
 
 	if (cpumask_test_cpu(policy->cpu, cpu_lp_mask))
-		freq = max(CONFIG_INPUT_BOOST_FREQ_LP, CONFIG_MIN_FREQ_LP);
+		freq = max(INPUT_BOOST_FREQ_LP, MIN_FREQ_LP);
 	else
-		freq = max(CONFIG_INPUT_BOOST_FREQ_PERF, CONFIG_MIN_FREQ_PERF);
+		freq = max(INPUT_BOOST_FREQ_PERF, MIN_FREQ_PERF);
 
 	return min(freq, policy->max);
 }
@@ -70,9 +86,9 @@ static unsigned int get_max_boost_freq(struct cpufreq_policy *policy)
 		return 0;
 
 	if (cpumask_test_cpu(policy->cpu, cpu_lp_mask))
-		freq = CONFIG_MAX_BOOST_FREQ_LP;
+		freq = MAX_BOOST_FREQ_LP;
 	else
-		freq = CONFIG_MAX_BOOST_FREQ_PERF;
+		freq = MAX_BOOST_FREQ_PERF;
 
 	return min(freq, policy->max);
 }
@@ -100,12 +116,12 @@ static void __cpu_input_boost_kick(struct boost_drv *b)
 	if (!use_input_boost)
 		return;
 
-	if (test_bit(SCREEN_OFF, &b->state) || (CONFIG_INPUT_BOOST_DURATION_MS == 0))
+	if (test_bit(SCREEN_OFF, &b->state) || (INPUT_BOOST_DURATION_MS == 0))
 		return;
 
 	set_bit(INPUT_BOOST, &b->state);
 	if (!mod_delayed_work(system_unbound_wq, &b->input_unboost,
-			      msecs_to_jiffies(CONFIG_INPUT_BOOST_DURATION_MS)))
+			      msecs_to_jiffies(INPUT_BOOST_DURATION_MS)))
 		wake_up(&b->boost_waitq);
 }
 
@@ -243,9 +259,9 @@ static int cpu_notifier_cb(struct notifier_block *nb, unsigned long action,
 	if (test_bit(INPUT_BOOST, &b->state))
 		policy->min = get_input_boost_freq(policy);
 	else if (cpumask_test_cpu(policy->cpu, cpu_lp_mask))
-		policy->min = CONFIG_MIN_FREQ_LP;
+		policy->min = MIN_FREQ_LP;
 	else
-		policy->min = CONFIG_MIN_FREQ_PERF;
+		policy->min = MIN_FREQ_PERF;
 
 	return NOTIFY_OK;
 }
@@ -267,7 +283,7 @@ static int msm_drm_notifier_cb(struct notifier_block *nb, unsigned long action,
 	/* Boost when the screen turns on and unboost when it turns off */
 	if (*blank == MSM_DRM_BLANK_UNBLANK) {
 		clear_bit(SCREEN_OFF, &b->state);
-		__cpu_input_boost_kick_max(b, CONFIG_WAKE_BOOST_DURATION_MS);
+		__cpu_input_boost_kick_max(b, WAKE_BOOST_DURATION_MS);
 	} else {
 		set_bit(SCREEN_OFF, &b->state);
 		wake_up(&b->boost_waitq);
