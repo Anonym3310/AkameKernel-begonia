@@ -12,11 +12,15 @@
 #include <linux/kthread.h>
 #include <linux/version.h>
 #include <linux/slab.h>
+#include <linux/moduleparam.h>
 
 /* The sched_param struct is located elsewhere in newer kernels */
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 10, 0)
 #include <uapi/linux/sched/types.h>
 #endif
+
+static bool use_input_boost = true;
+module_param(use_input_boost, bool, 0644);
 
 enum {
 	SCREEN_OFF,
@@ -48,6 +52,8 @@ static struct boost_drv boost_drv_g __read_mostly = {
 static unsigned int get_input_boost_freq(struct cpufreq_policy *policy)
 {
 	unsigned int freq;
+	if (!use_input_boost)
+		return 0;
 
 	if (cpumask_test_cpu(policy->cpu, cpu_lp_mask))
 		freq = max(CONFIG_INPUT_BOOST_FREQ_LP, CONFIG_MIN_FREQ_LP);
@@ -60,6 +66,8 @@ static unsigned int get_input_boost_freq(struct cpufreq_policy *policy)
 static unsigned int get_max_boost_freq(struct cpufreq_policy *policy)
 {
 	unsigned int freq;
+	if (!use_input_boost)
+		return 0;
 
 	if (cpumask_test_cpu(policy->cpu, cpu_lp_mask))
 		freq = CONFIG_MAX_BOOST_FREQ_LP;
@@ -72,6 +80,8 @@ static unsigned int get_max_boost_freq(struct cpufreq_policy *policy)
 static void update_online_cpu_policy(void)
 {
 	unsigned int cpu;
+	if (!use_input_boost)
+		return;
 
 	get_online_cpus();
 	for_each_possible_cpu(cpu) {
@@ -87,6 +97,9 @@ static void update_online_cpu_policy(void)
 
 static void __cpu_input_boost_kick(struct boost_drv *b)
 {
+	if (!use_input_boost)
+		return;
+
 	if (test_bit(SCREEN_OFF, &b->state) || (CONFIG_INPUT_BOOST_DURATION_MS == 0))
 		return;
 
@@ -98,6 +111,9 @@ static void __cpu_input_boost_kick(struct boost_drv *b)
 
 void cpu_input_boost_kick(void)
 {
+	if (!use_input_boost)
+		return;
+
 	struct boost_drv *b = &boost_drv_g;
 
 	__cpu_input_boost_kick(b);
@@ -108,6 +124,9 @@ static void __cpu_input_boost_kick_max(struct boost_drv *b,
 {
 	unsigned long boost_jiffies = msecs_to_jiffies(duration_ms);
 	unsigned long curr_expires, new_expires;
+
+	if (!use_input_boost)
+		return;
 
 	if (test_bit(SCREEN_OFF, &b->state))
 		return;
@@ -130,6 +149,9 @@ static void __cpu_input_boost_kick_max(struct boost_drv *b,
 
 void cpu_input_boost_kick_max(unsigned int duration_ms)
 {
+	if (!use_input_boost)
+		return;
+
 	struct boost_drv *b = &boost_drv_g;
 
 	__cpu_input_boost_kick_max(b, duration_ms);
@@ -137,6 +159,9 @@ void cpu_input_boost_kick_max(unsigned int duration_ms)
 
 static void input_unboost_worker(struct work_struct *work)
 {
+	if (!use_input_boost)
+		return;
+
 	struct boost_drv *b = container_of(to_delayed_work(work),
 					   typeof(*b), input_unboost);
 
@@ -146,6 +171,9 @@ static void input_unboost_worker(struct work_struct *work)
 
 static void max_unboost_worker(struct work_struct *work)
 {
+	if (!use_input_boost)
+		return;
+
 	struct boost_drv *b = container_of(to_delayed_work(work),
 					   typeof(*b), max_unboost);
 
@@ -155,6 +183,9 @@ static void max_unboost_worker(struct work_struct *work)
 
 static int cpu_boost_thread(void *data)
 {
+	if (!use_input_boost)
+		return 0;
+
 	static const struct sched_param sched_max_rt_prio = {
 		.sched_priority = MAX_RT_PRIO - 1
 	};
@@ -184,6 +215,9 @@ static int cpu_boost_thread(void *data)
 static int cpu_notifier_cb(struct notifier_block *nb, unsigned long action,
 			   void *data)
 {
+	if (!use_input_boost)
+		return 0;
+
 	struct boost_drv *b = container_of(nb, typeof(*b), cpu_notif);
 	struct cpufreq_policy *policy = data;
 
@@ -219,6 +253,9 @@ static int cpu_notifier_cb(struct notifier_block *nb, unsigned long action,
 static int msm_drm_notifier_cb(struct notifier_block *nb, unsigned long action,
 			  void *data)
 {
+	if (!use_input_boost)
+		return 0;
+
 	struct boost_drv *b = container_of(nb, typeof(*b), msm_drm_notif);
 	struct msm_drm_notifier *evdata = data;
 	int *blank = evdata->data;
@@ -245,6 +282,10 @@ static void cpu_input_boost_input_event(struct input_handle *handle,
 {
 	struct boost_drv *b = handle->handler->private;
 
+	if (!use_input_boost)
+		return;
+
+
 	__cpu_input_boost_kick(b);
 }
 
@@ -254,6 +295,9 @@ static int cpu_input_boost_input_connect(struct input_handler *handler,
 {
 	struct input_handle *handle;
 	int ret;
+
+	if (!use_input_boost)
+		return 0;
 
 	handle = kzalloc(sizeof(*handle), GFP_KERNEL);
 	if (!handle)
@@ -282,6 +326,9 @@ free_handle:
 
 static void cpu_input_boost_input_disconnect(struct input_handle *handle)
 {
+	if (!use_input_boost)
+		return;
+
 	input_close_device(handle);
 	input_unregister_handle(handle);
 	kfree(handle);
