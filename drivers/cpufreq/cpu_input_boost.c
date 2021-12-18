@@ -38,6 +38,15 @@ module_param(MIN_FREQ_LP, uint, 0644);
 static unsigned int MIN_FREQ_PERF = CONFIG_MIN_FREQ_PERF;
 module_param(MIN_FREQ_PERF, uint, 0644);
 
+#if (!defined(CONFIG_LITTLE_CPU_MASK))
+// for 6c Little
+static int cpu_lp_mask = 63;
+#endif
+#if (!defined(CONFIG_BIG_CPU_MASK))
+// for 2c Big
+static int cpu_perf_mask = 192;
+#endif
+
 enum {
 	SCREEN_OFF,
 	INPUT_BOOST,
