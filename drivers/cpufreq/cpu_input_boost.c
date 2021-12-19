@@ -40,11 +40,13 @@ module_param(MIN_FREQ_PERF, uint, 0644);
 
 #if (!defined(CONFIG_LITTLE_CPU_MASK))
 // for 6c Little
-static int cpu_lp_mask = 63;
+static const unsigned long lp_cpu_bits = 63;
+const struct cpumask *const cpu_lp_mask = to_cpumask(&lp_cpu_bits);
 #endif
 #if (!defined(CONFIG_BIG_CPU_MASK))
 // for 2c Big
-static int cpu_perf_mask = 192;
+static const unsigned long perf_cpu_bits = 192;
+const struct cpumask *const cpu_perf_mask = to_cpumask(&perf_cpu_bits);
 #endif
 
 enum {
