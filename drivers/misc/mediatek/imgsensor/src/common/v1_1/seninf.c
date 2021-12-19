@@ -303,13 +303,13 @@ static long seninf_ioctl(struct file *pfile,
 		break;
 	/*mmdvfs end*/
 #endif
-#ifdef CONFIG_MTK_CAM_SECURITY_SUPPORT
-	case KDSENINFIOC_X_SECURE_DUMP:
-		if (imgsensor_ca_invoke_command(
-			IMGSENSOR_TEE_CMD_DUMP_REG, c_params, &ret) != 0)
-			ret = ERROR_TEE_CA_TA_FAIL;
-		break;
-#endif
+// #ifdef CONFIG_MTK_CAM_SECURITY_SUPPORT
+// 	case KDSENINFIOC_X_SECURE_DUMP:
+// 		if (imgsensor_ca_invoke_command(
+// 			IMGSENSOR_TEE_CMD_DUMP_REG, c_params, &ret) != 0)
+// 			ret = ERROR_TEE_CA_TA_FAIL;
+// 		break;
+// #endif
 
 	default:
 		PK_DBG("No such command %d\n", cmd);
