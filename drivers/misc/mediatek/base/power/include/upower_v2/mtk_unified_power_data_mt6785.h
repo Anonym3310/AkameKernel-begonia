@@ -417,9 +417,9 @@ struct upower_tbl upower_tbl_b_6785T = {
 
 struct upower_tbl upower_tbl_cluster_b_6785T = {
 	.row = {
-		{.cap = 306, .volt = 60000, .dyn_pwr = 0,
-			.lkg_pwr = {0, 0, 0, 0, 0, 0} },
 		{.cap = 450, .volt = 67500, .dyn_pwr = 0,
+			.lkg_pwr = {0, 0, 0, 0, 0, 0} },
+		{.cap = 486, .volt = 69375, .dyn_pwr = 0,
 			.lkg_pwr = {0, 0, 0, 0, 0, 0} },
 		{.cap = 528, .volt = 71875, .dyn_pwr = 0,
 			.lkg_pwr = {0, 0, 0, 0, 0, 0} },
