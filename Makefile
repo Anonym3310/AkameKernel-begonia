@@ -436,7 +436,7 @@ LINUXINCLUDE    := \
 		$(USERINCLUDE)
 
 KBUILD_AFLAGS   := -D__ASSEMBLY__
-KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
+KBUILD_CFLAGS   := -Wall -Wundef -Wno-trigraphs \
 		   -fno-strict-aliasing -fno-common -fshort-wchar \
 		   -Werror-implicit-function-declaration \
 		   -Wno-format-security -Wno-error=format \
@@ -728,6 +728,25 @@ KBUILD_CFLAGS += $(call cc-ifversion, -gt, 0900, \
 KBUILD_CFLAGS += $(call cc-ifversion, -lt, 0409, \
 			$(call cc-disable-warning,maybe-uninitialized,))
 
+KBUILD_CFLAGS += $(call cc-ifversion, -gt, 0900, \
+			$(call cc-option, -Wno-psabi) \
+			$(call cc-disable-warning,maybe-uninitialized,) \
+			$(call cc-disable-warning,format,) \
+			$(call cc-disable-warning,array-bounds,) \
+			$(call cc-disable-warning,array-compare,) \
+			$(call cc-disable-warning,stringop-overread,) \
+                        $(call cc-disable-warning,duplicate-decl-specifier,) \
+                        $(call cc-disable-warning,strict-prototypes,) \
+                        $(call cc-disable-warning,misleading-indentation,) \
+                        $(call cc-disable-warning,unused-variable,) \
+                        $(call cc-disable-warning,sizeof-pointer-memaccess,) \
+			$(call cc-disable-warning,memset-elt-size,) \
+                        $(call cc-disable-warning,address,) \
+			$(call cc-disable-warning,switch-unreachable,) \
+			$(call cc-disable-warning,unused-result,) \
+			$(call cc-disable-warning,array-parameter,) \
+			$(call cc-disable-warning,stringop-overflow,))
+
 # Tell gcc to never replace conditional load with a non-conditional one
 KBUILD_CFLAGS	+= $(call cc-option,--param=allow-store-data-races=0)
 KBUILD_CFLAGS	+= $(call cc-option,-fno-allow-store-data-races)
@@ -987,7 +1006,7 @@ KBUILD_CFLAGS  += $(call cc-option,-fno-stack-check,)
 KBUILD_CFLAGS   += $(call cc-option,-Werror=implicit-int)
 
 # require functions to have arguments in prototypes, not empty 'int foo()'
-KBUILD_CFLAGS   += $(call cc-option,-Werror=strict-prototypes)
+KBUILD_CFLAGS   +=
 
 # Prohibit date/time macros, which would make the build non-deterministic
 KBUILD_CFLAGS   += $(call cc-option,-Werror=date-time)
