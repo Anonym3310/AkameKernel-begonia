@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: GPL-2.0
+
+menu "Hotplugging drivers"
+
+menuconfig HOTPLUG
+	bool "Hotplug support"
+	default n
+	help
+	  The hotplug mechanism asynchronously notifies the user space
+	  when hardware is inserted, removed, or undergoes
+	  a similarly significant state change.
+
+	  For modules called DRIVER, there is an event variable
+	  that suggests a driver to handle a hot-plugged device.
+
+if HOTPLUG
+
+config ALUCARD_HOTPLUG
+	bool "Alucard hotplug driver"
+	default n
+	help
+	  Generic Alucard-hotplug cpu hotplug driver for ARM SOCs
+
+endif
+
+endmenu
