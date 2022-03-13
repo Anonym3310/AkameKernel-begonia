@@ -68,6 +68,72 @@ extern void cpu_load_update_active(struct rq *this_rq);
 static inline void cpu_load_update_active(struct rq *this_rq) { }
 #endif
 
+
+#ifdef CONFIG_SCHED_WALT
+extern unsigned int walt_cpu_util_freq_divisor;
+extern unsigned int sched_ravg_window;
+#define sched_ravg_window TICK_NSEC
+
+struct walt_sched_stats {
+	int nr_big_tasks;
+	u64 cumulative_runnable_avg_scaled;
+	u64 pred_demands_sum_scaled;
+};
+
+struct cpu_cycle {
+	u64 cycles;
+	u64 time;
+};
+
+struct group_cpu_time {
+	u64 curr_runnable_sum;
+	u64 prev_runnable_sum;
+	u64 nt_curr_runnable_sum;
+	u64 nt_prev_runnable_sum;
+};
+
+struct load_subtractions {
+	u64 window_start;
+	u64 subs;
+	u64 new_subs;
+};
+
+#define NUM_TRACKED_WINDOWS 2
+#define NUM_LOAD_INDICES 1000
+
+struct sched_cluster {
+	raw_spinlock_t load_lock;
+	struct list_head list;
+	struct cpumask cpus;
+	int id;
+	int max_power_cost;
+	int min_power_cost;
+	int max_possible_capacity;
+	int capacity;
+	int efficiency; /* Differentiate cpus with different IPC capability */
+	int load_scale_factor;
+	unsigned int exec_scale_factor;
+	/*
+	 * max_freq = user maximum
+	 * max_mitigated_freq = thermal defined maximum
+	 * max_possible_freq = maximum supported by hardware
+	 */
+	unsigned int cur_freq, max_freq, max_mitigated_freq, min_freq;
+	unsigned int max_possible_freq;
+	bool freq_init_done;
+	int dstate, dstate_wakeup_latency, dstate_wakeup_energy;
+	unsigned int static_cluster_pwr_cost;
+	int notifier_sent;
+	bool wake_up_idle;
+	u64 aggr_grp_load;
+	u64 coloc_boost_load;
+};
+
+extern unsigned int sched_disable_window_stats;
+
+extern struct timer_list sched_grp_timer;
+#endif /* CONFIG_SCHED_WALT */
+
 /*
  * Helpers for converting nanosecond timing to jiffy resolution
  */
