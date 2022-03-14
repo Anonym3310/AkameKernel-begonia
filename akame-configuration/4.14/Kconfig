@@ -1,0 +1,5 @@
+menu "For 4.14 kernel version"
+source "akame-configuration/4.14/mtk/Kconfig"
+source "akame-configuration/4.14/qualcomm/Kconfig"
+source "akame-configuration/4.14/exynos/Kconfig"
+endmenu

@@ -1,0 +1,1138 @@
+menu "Exynos"
+
+config NETHUNTER_SUPPORT
+
+	bool "Basic nethunter support"
+
+	default n
+
+	help
+
+		Enable basic nethunter support in-kernel which are sysvipc, module support, and mac80211 support.
+
+	select SYSVIPC
+
+	select MODULES
+
+	select MODULE_FORCE_LOAD
+
+	select MODULE_UNLOAD
+
+	select MODULE_FORCE_UNLOAD
+
+	select MODVERSIONS
+
+	select MMC
+	
+	select CFG80211_WEXT
+
+	select MAC80211
+
+	select MAC80211_MESH
+
+	select MAC80211_RC_MINSTREL
+
+	select MAC80211_RC_MINSTREL_HT
+
+	select MAC80211_RC_MINSTREL_VHT
+
+
+config NETHUNTER_BLUETOOTH_SUPPORT
+
+	bool "Bluetooth adapters and hci0 support"
+
+	default y if NETHUNTER_SUPPORT
+
+        depends on NETHUNTER_SUPPORT
+
+        help	
+
+            Enable Bluetooth adapters and hci0 support.
+
+	select BT
+
+	select BT_BREDR
+
+	select BT_RFCOMM
+
+	select BT_RFCOMM_TTY
+
+	select BT_BNEP
+
+	select BT_BNEP_MC_FILTER
+
+	select BT_BNEP_PROTO_FILTER
+
+	select BT_HIDP
+
+	select BT_HS
+
+	select BT_LE
+
+	select BT_LEDS
+
+	select BT_SELFTEST
+
+	select BT_SELFTEST_ECDH
+
+	select BT_SELFTEST_SMP
+
+	select BT_HCIBTUSB
+
+	select BT_HCIBTSDIO
+
+	select BT_HCIBTUSB_BCM
+
+	select BT_HCIBTUSB_RTL
+
+	select BT_HCIUART
+
+	select BT_HCIUART_H4
+
+	select BT_HCIUART_BCSP
+
+	select BT_HCIUART_ATH3K
+
+	select BT_HCIUART_INTEL
+
+	select BT_HCIUART_QCA
+
+	select BT_HCIUART_AG6XX
+
+	select BT_HCIUART_MRVL
+
+	select BT_HCIBCM203X
+
+	select BT_HCIBPA10X
+
+	select BT_HCIVHCI
+
+	select BT_MRVL
+
+	select BT_MRVL_SDIO
+
+	select BT_ATH3K
+
+	select BT_HCIBCM203X
+
+	select BT_HCIBPA10X
+
+	select BT_HCIBFUSB
+
+
+config NETHUNTER_SDR_SUPPORT
+
+	bool "SDR support"
+
+	default y if NETHUNTER_SUPPORT
+
+	depends on NETHUNTER_SUPPORT
+
+	help
+
+		Enable SDR drivers support like airspy, hackrf  and msi2500.
+
+	select MEDIA_SUPPORT
+
+	select MEDIA_DIGITAL_TV_SUPPORT
+
+	select MEDIA_SDR_SUPPORT
+
+	select MEDIA_USB_SUPPORT
+
+	select USB_AIRSPY
+
+	select USB_HACKRF
+
+	select USB_MSI2500
+
+
+config NETHUNTER_HID_SUPPORT
+
+	bool "HID support"
+
+	default y if NETHUNTER_SUPPORT
+
+	depends on NETHUNTER_SUPPORT
+
+	help
+
+		Enable HID support to perform HID attacks with external gadgets and such.
+
+	select HID
+	
+	select HID_BATTERY_STRENGTH
+
+	select HIDRAW
+
+	select UHID
+
+	select HID_GENERIC
+	
+	select USB_HID
+
+	select HID_PID
+
+	select USB_HIDDEV
+
+	select I2C_HID
+	
+
+config NETHUNTER_EXTRAHID_SUPPORT
+
+	bool "Extra HID support"
+
+	default y if NETHUNTER_HID_SUPPORT
+
+	depends on NETHUNTER_HID_SUPPORT
+
+	help
+
+		Enable extra HID support to perform HID attacks with external gadgets and such.
+
+	select HID_A4TECH
+	
+	select HID_ACCUTOUCH
+	
+	select HID_ACRUX
+	
+	select HID_ACRUX_FF
+	
+	select HID_APPLE
+	
+	select HID_APPLEIR
+	
+	select HID_ASUS
+	
+	select HID_AUREAL
+
+	select HID_BELKIN
+
+	select HID_BETOP_FF
+
+	select HID_CHERRY
+
+	select HID_CHICONY
+
+	select HID_CORSAIR
+
+	select HID_PRODIKEYS
+
+	select HID_CMEDIA
+
+	select HID_CP2112
+
+	select HID_CYPRESS
+
+	select HID_DRAGONRISE
+
+	select HID_EMS_FF
+
+	select HID_ELECOM
+
+	select HID_ELO
+
+	select HID_EZKEY
+
+	select HID_GEMBIRD
+
+	select HID_GFRM
+
+	select HID_HOLTEK
+
+	select HID_GT683R
+
+	select HID_KEYTOUCH
+
+	select HID_KYE
+
+	select HID_UCLOGIC
+
+	select HID_WALTOP
+       
+	select HID_GYRATION
+
+	select HID_ICADE
+
+	select HID_ITE
+
+	select HID_TWINHAN
+
+	select HID_KENSINGTON
+
+	select HID_LCPOWER
+
+	select HID_LED
+
+	select HID_LENOVO
+
+	select HID_LOGITECH
+
+	select HID_LOGITECH_DJ
+
+	select HID_LOGITECH_HIDPP
+
+	select HID_MAGICMOUSE
+
+	select HID_MAYFLASH
+
+	select HID_MICROSOFT
+
+	select HID_MONTEREY
+
+	select HID_MULTITOUCH
+
+	select HID_NTI
+
+	select HID_NTRIG
+
+	select HID_ORTEK
+
+	select HID_PANTHERLORD
+
+	select HID_PENMOUNT
+
+	select HID_PETALYNX
+
+	select HID_PICOLCD
+
+	select HID_PICOLCD_FB
+
+	select HID_PICOLCD_BACKLIGHT
+
+	select HID_PICOLCD_LEDS
+
+	select HID_PLANTRONICS
+	
+	select HID_PRIMAX
+
+	select HID_RETRODE
+
+	select HID_ROCCAT
+
+	select HID_SAITEK
+
+	select HID_SAMSUNG
+
+	select HID_SONY
+
+	select HID_SPEEDLINK
+
+	select HID_STEELSERIES
+
+	select HID_SUNPLUS
+
+	select HID_RMI
+
+	select HID_GREENASIA
+
+	select HID_SMARTJOYPLUS
+
+	select HID_TIVO
+
+	select HID_TOPSEED
+
+	select HID_THINGM
+
+	select HID_THRUSTMASTER
+
+	select HID_UDRAW_PS3
+
+	select HID_WACOM
+
+	select HID_WIIMOTE
+
+	select HID_XINMO
+
+	select HID_ZEROPLUS
+
+	select HID_ZYDACRON
+
+	select HID_SENSOR_HUB
+
+	select HID_SENSOR_CUSTOM_SENSOR
+
+	select HID_ALPS
+
+	select HID_QVR
+
+
+config NETHUNTER_USB_SUPPORT
+
+	bool "USB support"
+
+	default y if NETHUNTER_SUPPORT
+
+	depends on NETHUNTER_SUPPORT
+
+	help
+
+		Enable USB support for nethunter usage like otg access, mtp, rndis and eem.
+
+	select USB_OTG
+
+	select USB_MON
+
+	select USB_XHCI_HCD
+
+	select USB_EHCI_HCD
+
+	select USB_ACM
+
+	select USB_STORAGE
+
+	select USB_SERIAL
+
+	select USB_SERIAL_CH341
+
+	select USB_SERIAL_CP210X
+
+	select USB_SERIAL_FTDI_SIO
+
+	select USB_SERIAL_PL2303
+
+	select USB_GADGET
+
+	select USB_CONFIGFS_SERIAL
+
+	select USB_CONFIGFS_ACM
+
+	select USB_CONFIGFS_OBEX
+
+	select USB_CONFIGFS_NCM
+
+	select USB_CONFIGFS_ECM
+	
+	select USB_CONFIGFS_ECM_SUBSET
+
+	select USB_CONFIGFS_RNDIS
+
+	select USB_CONFIGFS_EEM
+
+	select USB_CONFIGFS_MASS_STORAGE
+	
+
+config NETHUNTER_EXTRARNDIS_SUPPORT
+
+	bool "Extra Rndis support"
+
+	default y if NETHUNTER_USB_SUPPORT
+
+	depends on NETHUNTER_USB_SUPPORT
+
+	help
+
+		Enable extra rndis support for nethunter usage.
+	
+	select CONFIGFS_QCRNDIS
+	
+	select USB_CONFIGFS_RMNET_BAM
+	
+	select USB_CONFIGFS_MBIM_BAM
+
+
+config NETHUNTER_EXTRACONFIGFS_SUPPORT
+
+	bool "Extra configfs support"
+
+	default y if NETHUNTER_USB_SUPPORT
+
+	depends on NETHUNTER_USB_SUPPORT
+
+	help
+
+		Enable exta configfs support for nethunter usage
+
+    select USB_CONFIGFS_F_LB_SS
+	
+	select USB_CONFIGFS_F_FS
+	
+	select USB_CONFIGFS_F_ACC
+
+	select USB_CONFIGFS_F_AUDIO_SRC
+	
+	select USB_CONFIGFS_UEVENT
+	
+	select USB_CONFIGFS_F_UAC1
+
+	select USB_CONFIGFS_F_UAC1_LEGACY
+	
+	select USB_CONFIGFS_F_UAC2
+
+	select USB_CONFIGFS_F_MIDI
+
+	select USB_CONFIGFS_F_HID
+	
+	select USB_CONFIGFS_F_UVC
+
+	select USB_CONFIGFS_F_PRINTER
+	
+	select IIO_CONFIGFS
+
+
+config NETHUNTER_WIFI_DRIVERS_SUPPORT
+
+	bool "WiFi drivers support"
+
+	default y if NETHUNTER_SUPPORT
+
+	depends on NETHUNTER_SUPPORT
+
+	help
+
+		Enable adm8211, ath5k, ath9k, ath6k, mt7601, ralink, realtek, and zydas drivers support.
+
+	select WLAN_VENDOR_ADMTEK
+
+	select ADM8211
+
+	select WLAN_VENDOR_ATH
+
+	select ATH5K
+
+	select ATH9K_BTCOEX_SUPPORT
+
+	select ATH9K
+
+	select ATH9K_AHB
+
+	select ATH9K_DFS_CERTIFIED
+
+	select ATH9K_DYNACK
+
+	select ATH9K_WOW
+
+	select ATH9K_RFKILL
+
+	select ATH9K_CHANNEL_CONTEXT
+
+	select ATH9K_PCOEM
+
+	select ATH9K_HTC
+
+	select CARL9170
+
+	select CARL9170_LEDS
+
+	select ATH6KL
+
+	select ATH6KL_USB
+
+	select AR5523
+
+	select ATH10K
+
+	select ATH10K_USB
+
+	select WCN36XX
+
+	select WLAN_VENDOR_ATMEL
+
+	select AT76C50X_USB
+
+	select LIBERTAS
+
+	select LIBERTAS_USB
+
+	select WLAN_VENDOR_MEDIATEK
+
+	select MT7601U
+
+	select WLAN_VENDOR_RALINK
+
+	select RT2X00
+
+	select RT2500USB
+
+	select RT73USB
+
+	select RT2800USB
+
+	select RT2800USB_RT33XX
+
+	select RT2800USB_RT35XX
+
+	select RT2800USB_RT3573
+
+	select RT2800USB_RT53XX
+
+	select RT2800USB_RT55XX
+
+	select RT2800USB_UNKNOWN
+
+	select WLAN_VENDOR_REALTEK
+
+	select RTL8187
+
+	select RTL_CARDS
+
+	select RTL8192CU
+
+	select RTL8XXXU
+
+	select RTL8XXXU_UNTESTED
+
+	select WLAN_VENDOR_ZYDAS
+
+	select USB_ZD1201
+
+	select ZD1211RW
+
+	select USB_NET_RNDIS_WLAN
+
+
+config NETHUNTER_ETHERNET_SUPPORT
+
+	bool "Ethernet drivers support"
+
+	default y if NETHUNTER_SUPPORT
+
+	depends on NETHUNTER_SUPPORT
+
+	help
+
+		Enable ethernet drivers support.
+
+	select USB_CATC
+	
+	select USB_KAWETH
+	
+	select USB_PEGASUS
+	
+	select USB_RTL8150
+
+	select USB_RTL8152
+	
+	select USB_LAN78XX
+	
+	select USB_USBNET
+	
+	select USB_NET_AX8817
+	
+	select USB_NET_AX88179_178A
+	
+	select USB_NET_CDCETHER
+	
+	select USB_NET_CDC_EEM
+	
+	select USB_NET_CDC_NCM
+	
+	select USB_NET_CDC_MBIM
+
+
+    #==========================#
+
+config DOCKER
+
+	bool "Docker support"
+
+	default n
+
+	help
+
+		Enable options required for Docker.
+
+
+
+	select PROC_PID_CPUSET
+
+	select NET
+
+	select NETDEVICES
+
+	select NET_CORE
+
+	select INET
+
+	select IPV6
+
+	select NET_L3_MASTER_DEV
+
+	select NETFILTER
+
+	select NETFILTER_ADVANCED
+
+	select NF_CONNTRACK
+
+	select NETFILTER_XTABLES
+
+	select NF_CONNMARK_IPV4
+
+	select IP_NF_IPTABLES
+
+	select NF_NAT_MASQUERADE_IPV4
+
+	select IP_NF_NAT
+
+	select IP_NF_TARGET_NETMAP # TODO: required?
+
+	select IP_NF_TARGET_REDIRECT # TODO: required?
+
+	select NET_SCHED
+
+	select CGROUP_NET_PRIO
+
+	select CGROUP_NET_CLASSID
+
+	select MD
+
+	select TTY
+
+	select UNIX98_PTYS
+
+	select HUGETLBFS # TODO: overlay?
+
+	select PERSISTENT_KEYRINGS # TODO: required?
+
+	select ENCRYPTED_KEYS # TODO: required?
+
+	select KEY_DH_OPERATIONS # TODO: required?
+
+
+
+	# From ebuild
+
+	select NAMESPACES
+
+	select NET_NS
+
+	select PID_NS
+
+	select IPC_NS
+
+	select UTS_NS
+
+	select CGROUP_CPUACCT
+
+	select CGROUP_DEVICE
+
+	select CGROUP_FREEZER
+
+	select CPUSETS
+
+	select BLOCK
+
+	select BLK_CGROUP
+
+	select BLK_DEV_THROTTLING
+
+	select KEYS
+
+	select VETH
+
+	select BRIDGE
+
+	select BRIDGE_NETFILTER
+
+	select NF_NAT_IPV4
+
+	select IP_NF_FILTER
+
+	select IP_NF_TARGET_MASQUERADE
+
+	select NETFILTER_XT_MATCH_ADDRTYPE
+
+	select NETFILTER_XT_MATCH_CONNTRACK
+
+	select NETFILTER_XT_MATCH_IPVS
+
+	select NF_NAT
+
+	select NF_NAT_NEEDED
+
+	select POSIX_MQUEUE
+
+	select USER_NS
+
+	select SECCOMP
+
+	select CGROUP_PIDS
+
+	select CGROUP_HUGETLB
+
+	select NET_CLS_CGROUP
+
+	select RT_GROUP_SCHED
+
+	select IP_VS
+
+	select IP_VS_PROTO_TCP
+
+	select IP_VS_PROTO_UDP
+
+	select IP_VS_NFCT
+
+	select IP_VS_RR
+
+	select VXLAN
+
+	select IPVLAN
+
+	select VLAN_8021Q
+
+	select BRIDGE_VLAN_FILTERING
+
+	select SECURITY_APPARMOR
+
+	select MACVLAN
+
+	select DUMMY
+
+	select DEVPTS_MULTIPLE_INSTANCES
+
+
+config DOCKER_STATISTICS
+
+	bool "Gathering statistics BROKEN"
+
+	default y if DOCKER
+
+	depends on DOCKER
+
+	help
+
+		Allow gathering statistics from running containers
+
+
+
+	select RESOURCE_COUNTERS
+
+	select CGROUP_PERF
+
+	select CFS_BANDWIDTH
+
+
+
+## Required kernel version: 4.5
+
+
+
+
+
+config DOCKER_SWAP
+
+	bool "Enable swap limit"
+
+	default n
+
+	depends on DOCKER
+
+	help
+
+		Yes if you want to be able to limit swap usage of containers
+	
+	select MEMCG
+
+	select MEMCG_SWAP
+
+	select MEMCG_SWAP_ENABLED
+
+
+
+config DOCKER_SECURE_NETWORKS
+
+	bool "Secure networks"
+
+	default y if DOCKER
+
+	depends on DOCKER
+
+	help
+
+		Yes if you use secure networks
+
+
+
+	select XFRM_ALGO
+
+	select XFRM_USER
+
+
+
+
+
+config DOCKER_AUFS
+
+	bool "Use aufs"
+
+	default y if DOCKER
+
+	depends on DOCKER
+
+	help
+
+		Yes if you are using aufs
+
+
+
+	select AUFS_FS
+
+	select EXT4_FS_POSIX_ACL
+
+	select EXT4_FS_SECURITY
+
+
+
+config DOCKER_BTRFS
+
+	bool "Use btrfs"
+
+	default n
+
+	depends on DOCKER
+
+	help
+
+		Yes if you are using btrfs
+
+
+
+	select BTRFS_FS
+
+	select BTRFS_FS_POSIX_ACL
+
+
+
+config DOCKER_DEVICE_MAPPER
+
+	bool "Device Mapper support"
+
+	default y if DOCKER
+
+	depends on DOCKER
+
+	help
+
+		Yes if you want support for device mapper (recommended)
+
+
+
+	select BLK_DEV_DM
+
+	select DM_THIN_PROVISIONING
+
+	select EXT4_FS
+
+	select EXT4_FS_POSIX_ACL
+
+	select EXT4_FS_SECURITY
+
+
+
+config DOCKER_OVERLAY_FS
+
+	bool "Use overlay FS"
+
+	default y
+
+	depends on DOCKER
+
+	help
+
+		Yes if want to use the Overlay FS (recommended)
+
+
+
+	select OVERLAY_FS
+
+	select EXT4_FS_SECURITY
+
+	select EXT4_FS_POSIX_ACL
+
+
+
+    #==========================#
+
+
+config AKAME_SUPPORT
+
+	bool "Basic AkameKernel support"
+
+	default n
+
+	help
+
+        Support kernel headers, initial ramdisk/ramfs compressed using, ttl, tcp configs.
+        
+	select IKHEADERS
+
+	select SCHED_WALT
+
+	select RD_GZIP
+
+	select RD_BZIP2
+
+	select RD_LZMA
+
+	select RD_XZ
+
+	select RD_LZO
+
+	select RD_LZ4
+
+	select IP_NF_TARGET_TTL
+
+	select IP_NF_MATCH_TTL
+
+	select IP6_NF_TARGET_HL
+
+	select IP6_NF_MATCH_HL
+
+	select TCP_CONG_BIC
+
+	select TCP_CONG_CUBIC
+
+	select TCP_CONG_WESTWOOD
+
+	select TCP_CONG_HTCP
+
+	select TCP_CONG_HSTCP
+
+	select TCP_CONG_HYBLA
+
+	select TCP_CONG_VEGAS
+
+	select TCP_CONG_NV
+
+	select TCP_CONG_SCALABLE
+
+	select TCP_CONG_LP
+
+	select TCP_CONG_VENO
+
+	select TCP_CONG_YEAH
+
+	select TCP_CONG_ILLINOIS
+
+	select TCP_CONG_DCTCP
+
+	select TCP_CONG_CDG
+
+	select TCP_CONG_BBR
+
+	select TCP_CONG_SOCIOPATH
+
+	select TCP_CONG_BBR2
+
+
+config AKAME_ZRAM_SUPPORT
+
+	bool "Zram & Zswap support"
+
+	default y if AKAME_SUPPORT
+
+	depends on AKAME_SUPPORT
+
+	help
+
+		Enable Zram & Zswap support.
+
+    select CRYPTO_DEFLATE
+
+    select CRYPTO_LZO
+
+    select CRYPTO_LZ4
+  
+    select CRYPTO_LZ4HC
+
+    select CRYPTO_ZSTD
+
+    select SWAP
+
+    select FRONTSWAP
+
+    select ZPOOL
+
+    select ZBUD
+
+    select Z3FOLD
+
+    select ZSMALLOC
+
+    select PGTABLE_MAPPING
+
+    select ZSMALLOC_STAT
+
+    select BLK_DEV
+
+    select ZRAM
+
+    select ZRAM_WRITEBACK
+
+    select ZRAM_MEMORY_TRACKING
+
+    select ZRAM_SIZE_OVERRIDE
+
+
+config AKAME_FS_SUPPORT
+
+	bool "F2FS, NTFS support"
+
+	default y if AKAME_SUPPORT
+
+	depends on AKAME_SUPPORT
+
+	help
+
+		Enable F2FS, NTFS support
+
+	select F2FS_FS
+
+	select F2FS_STAT_FS
+
+	select F2FS_FS_XATTR
+
+	select F2FS_FS_POSIX_ACL
+
+	select F2FS_FS_SECURITY
+
+	select F2FS_FS_ENCRYPTION
+
+	select NTFS_FS
+
+	select NTFS_RW
+
+
+config AKAME_DISABLE
+
+	bool "Disable unnecessary items"
+
+	default n if AKAME_SUPPORT
+
+	depends on AKAME_SUPPORT
+
+	help
+
+		This item turns off unnecessary items that interfere with the normal operation of the kernel. Turn off all the below items and only then turn on this item.
+
+
+config RT2X00_DEBUG
+        bool "Ralink debug output"
+        depends on !AKAME_DISABLE
+        default n
+        ---help---
+          Enable debugging output for all rt2x00 modules
+
+
+config RTLWIFI_DEBUG
+        bool "Debugging output for rtlwifi driver family"
+        depends on !AKAME_DISABLE
+        default n
+        ---help---
+        To use the module option that sets the dynamic-debugging level for,
+        the front-end driver, this parameter must be "Y". For memory-limited
+        systems, choose "N". If in doubt, choose "Y".
+
+
+config ZD1211RW_DEBUG
+        bool "ZyDAS ZD1211 debugging"
+        depends on !AKAME_DISABLE
+        default n
+        ---help---
+          ZD1211 debugging messages. Choosing Y will result in additional debug
+          messages being saved to your kernel logs, which may help debug any
+          problems.
+
+
+endmenu
+
