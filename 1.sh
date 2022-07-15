@@ -27,15 +27,16 @@ echo -e "$red\n ##--------------------------------------------------------------
 
 #===[ Most Editable ]===#
 
-DEFCONFIG=test_defconfig
+DEFCONFIG=qemu_defconfig
 NKD=begonia-q
 CODENAME=begonia
 GCC_or_CLANG=1
 BUILD_KH=2
 ONLY_BUILD_KH=1
-ONLY_BUILD_AN=2
+ONLY_BUILD_AN=1
 IMAGE=Image.gz-dtb
-VER="-10"
+VER="-11"
+ANDROID=Q
 COMPILE="$IMAGE modules_install dtb dtbo.img"
 
 #===[ Editable ]===#
@@ -46,11 +47,11 @@ JOBS="-j14"
 
 #===[ Standart ]===#
 
+export HOST_ARCH=$(arch)
 ANYKERNEL_DIR=AnyKernel3
 OUT_DIR=out
 ARCH=arm64
 SUBARCH=$ARCH
-HOST_ARCH=$(arch)
 UN=$HOME/kernels
 CONFIG=".config"
 LOG="2>&1 | tee log.txt"
@@ -58,14 +59,14 @@ KBUILD_BUILD_USER=Anonym3310
 KBUILD_KVER="-AkameKernel"
 KBUILD_BUILD_HOST=anonym3310
 KERNEL_MAKE_ENV="DTC_EXT=/usr/bin/dtc CONFIG_BUILD_ARM64_DT_OVERLAY=y"
-CLANG_LD="OBJCOPY=llvm-objcopy${VER} \
+CLANG_VAL="OBJCOPY=llvm-objcopy${VER} \
           OBJDUMP=llvm-objdump${VER} \
           STRIP=llvm-strip${VER} \
           NM=llvm-nm${VER} \
           AR=llvm-ar${VER} \
-          AS=llvm-as${VER} \
-	  LD=ld.lld${VER}"
-VALUES=$KERNEL_MAKE_ENV #$CLANG_LD
+          AS=llvm-as${VER}"
+LD=ld.lld${VER}
+VALUES="${LD} #$KERNEL_MAKE_ENV #$CLANG_VAL"
 
 #########################
 #===[ Smart Exports ]===#
@@ -81,7 +82,7 @@ then
 
 CC=aarch64-zyc-linux-gnu-gcc
 GCC_PATH64=/root/kernels/aarch64-zyc-linux-gnu
-GCC_PATH32=/root/kernels/arm-zyc-linux-gnu
+GCC_PATH32=/root/kernels/arm-zyc-linux-gnueabi
 GCC_BIN64=$GCC_PATH64/bin
 GCC_BIN32=$GCC_PATH32/bin
 
@@ -178,6 +179,7 @@ then
 	INSTALL_MOD_PATH=. \
 	INSTALL_MOD_DIR=. \
 	${JOBS} \
+	${VALUES} \
 	${LOG}
 
 ####---------####
@@ -226,7 +228,8 @@ then
 	CROSS_COMPILE=${CROSS_COMPILE} \
 	CROSS_COMPILE_ARM32=${CROSS_COMPILE_ARM32} \
 	ARCH=${ARCH} \
-    	${JOBS}
+    	${VALUES} \
+	${JOBS}
 
 ####---------####
 #===[ Clang ]===#
@@ -243,7 +246,7 @@ else
 	${JOBS} \
     	$VALUES
 fi
-
+exit
 mkdir ${UN}/tmp
 KN=$(find ${OUT_DIR}/lib/modules/ -name modules.*)
 
@@ -305,6 +308,7 @@ then
         ARCH=${ARCH} \
         O=${OUT_DIR} \
         INSTALL_MOD_PATH=. \
+	${VALUES} \
 	${JOBS})
 
 ####---------####
@@ -362,13 +366,28 @@ cd ${UN}/${NKD}
 	cp -r AK3/* ${ANYKERNEL_DIR}
 	fi
 cd ${ANYKERNEL_DIR}
-	zip -r -9 AkameKernel-${CODENAME}-$(date +%d-%m-%y).zip * \
+	zip -r -9 AkameKernel-${CODENAME}-${ANDROID}-$(date +%d-%m-%y).zip * \
 	-x .git README.md *placeholder
 
 #===[ TIME BUILD ]===#
 
 buildtime
 	}
+
+ziptest()
+	{
+if [ -f ${UN}/${NKD}/${OUT_DIR}/arch/arm64/boot/${IMAGE} ]
+then
+zipak3
+else
+echo ""
+echo $red"Compilation failed"
+echo $red"$IMAGE not builded"
+echo ""
+exit
+fi
+	}
+
 
 
 ######################
@@ -380,7 +399,6 @@ then
 
 if [ "$ONLY_BUILD_KH" -eq "1" ]
 then
-
 buildkernel
 
 if [ "$BUILD_KH" -eq "1" ]
@@ -389,36 +407,26 @@ if [ "$BUILD_KH" -eq "1" ]
 #===[ Biuild KH ]===#
 #####################
 then
-
 buildkh
-
-zipak3
+ziptest
 
 #################
 #===[Skip KH]===#
 #################
 else
-
-zipak3
-
+ziptest
 fi
 
 #===[ END BUILD ]===#
 
 #===[ ONLY BUILD KERNEL HEADERS ]===#
-
 else
-
 buildkh
-
 fi
 
 ################################
 #===[ ONLY_BUILD_ANYKERNEL ]===#
 ################################
-
 else
-
-zipak3
-
+ziptest
 fi
