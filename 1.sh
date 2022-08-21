@@ -27,8 +27,8 @@ echo -e "$red\n ##--------------------------------------------------------------
 
 #===[ Most Editable ]===#
 
-DEFCONFIG=qemu_defconfig
-NKD=begonia-q
+DEFCONFIG=akame_defconfig
+NKD=AkameKernel-begonia
 CODENAME=begonia
 GCC_or_CLANG=1
 BUILD_KH=2
@@ -186,7 +186,7 @@ then
 #===[ Clang ]===#
 ####---------####
 else
-	make $DEFCONFIG $COMPILE \
+	make all modules $DEFCONFIG $COMPILE \
 	CC=${CC} \
 	CLANG_PATH=${CLANG_PATH} \
 	PATH=${PATH} \
@@ -210,12 +210,18 @@ echo -e "$yellow\n ##===========================================================
 echo -e " ##=========================== Build Kernel Headers ===========================##"
 echo -e " ##============================================================================##$nocol\n"
 
-sudo rm -rf ${UN}/kernel-headers/kernel-headers/
-sudo rm -rf ${UN}/tmp
+if [ -f ${UN}/kernel-headers ]
+then
+rm -rf ${UN}/kernel-headers/kernel-headers/*
 rm -rf ${UN}/kernel-headers-${CODENAME}.tar.xz
-mkdir ${UN}/kernel-headers/kernel-headers/
 cp -r * ${UN}/kernel-headers/kernel-headers/
 cd ${UN}/kernel-headers/kernel-headers/
+else
+git clone https://github.com/Anonym3310/kernel-headers --depth 1
+rm ${UN}/kernel-headers/kernel-headers/*
+cp -r * ${UN}/kernel-headers/kernel-headers/
+cd ${UN}/kernel-headers/kernel-headers/
+fi
 
 if [ "$GCC_or_CLANG" -eq "1" ]
 ####-------####
@@ -265,9 +271,7 @@ rm -rf arm*
 mkdir drivers
 cp -r misc drivers
 rm -rf misc
-cd ${UN}/kernel-headers/kernel-headers/
 cd $UN/
-
 sudo dpkg-deb --build kernel-headers kernel-headers-${CODENAME}.deb
 ls -l kernel-headers-${CODENAME}.deb
 
